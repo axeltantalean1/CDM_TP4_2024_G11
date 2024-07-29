@@ -18,8 +18,8 @@ int main(void)
 	DDRC&=~(1<<PORTC3);
 	DIDR0= 0x01;
 	//CONFIGURACION DEL TIMER1
-	TCCR1A |= (1 << WGM10 | 1 << COM1A0 | 1 << COM1A1 | 1<< COM1B0 | 1<<COM1B1);
-	TCCR1B |= (1 << CS12);
+	TCCR1A |= (1 << WGM10 | 1 << COM1A0 | 1 << COM1A1 | 1<< COM1B0 | 1<<COM1B1); // habilito el timer modo PWM fase correcta 8 bits y el modo invertido del pwm
+	TCCR1B |= (1 << CS12); // prescaler 128
 	OCR1A = 0;
 	OCR1B = 0;
 	DDRB |= (1 << PORTB1 | 1 << PORTB5 | 1 << PORTB2);
@@ -34,7 +34,7 @@ int main(void)
 	SerialPort_Send_String("Bienvenido. Presione R/G/B para modificar el color\r\n");
 	uint8_t topRed = 0;
 	uint16_t valorPot = 0;
-	ADCSRA|=(1<<ADSC);
+	ADCSRA|=(1<<ADSC);  // inicializo conversion
     while (1) 
     {	
 		if(topRed > TCNT1)				
@@ -42,7 +42,7 @@ int main(void)
 		else
 			PORTB |= (1<<PORTB5);
 		//LEO VALOR DEL POTE
-		if(ADCSRA&(1<<ADIF)){
+		if(ADCSRA&(1<<ADIF)){ // si termino la conversion
 			valorPot=(ADC/4);
 			ADCSRA|=(1<<ADIF);
 			ADCSRA|=(1<<ADSC);
